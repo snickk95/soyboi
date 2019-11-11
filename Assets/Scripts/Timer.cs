@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
 
     private Text timerText;
 
-    void awake()
+    void Awake()
     {
         timerText = GetComponent<Text>();
     }
