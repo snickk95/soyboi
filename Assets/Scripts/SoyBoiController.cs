@@ -8,6 +8,9 @@ using UnityEngine;
 public class SoyBoiController : MonoBehaviour
 {
     //public variables
+    public AudioClip runClip;
+    public AudioClip jumpClip;
+    public AudioClip slideClip;
     public float speed = 14f;
     public float accel = 6f;
     public bool isJumping;
@@ -17,6 +20,7 @@ public class SoyBoiController : MonoBehaviour
     public float jump = 14f;
 
     //private variables
+    private AudioSource audioSource;
     private SpriteRenderer sr;
     private Vector2 input;
     private Rigidbody2D rb;
@@ -32,7 +36,9 @@ public class SoyBoiController : MonoBehaviour
 
     void Awake()
     {
+
         //set variables to components on soy boi
+        audioSource = GetComponent<AudioSource>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -41,14 +47,24 @@ public class SoyBoiController : MonoBehaviour
     }
 
 
-
-
-
-
     void Start()
     {
         
     }
+
+
+
+    void PlayAudioClip(AudioClip clip)
+    {
+        if(audioSource!=null && clip !=null)
+        {
+            if(!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(clip);
+            }
+        }
+    }
+
 
     public bool PlayerIsGrounded()
     {
@@ -163,7 +179,12 @@ public class SoyBoiController : MonoBehaviour
             if (input.y>0f)
             {
                 isJumping = true;
-                animator.SetBool("IsOnWall", false);
+                PlayAudioClip(jumpClip);
+            }
+            animator.SetBool("IsOnWall", false);
+            if (input.x<0f || input.x > 0f)
+            {
+                PlayAudioClip(runClip);
             }
         }
     }
@@ -225,6 +246,7 @@ public class SoyBoiController : MonoBehaviour
 
             animator.SetBool("IsOnWall", false);
             animator.SetBool("IsJumping", true);
+            PlayAudioClip(jumpClip);
         }
         else if (!IsWallToLeftOrRight())
         {
@@ -235,6 +257,7 @@ public class SoyBoiController : MonoBehaviour
         if (IsWallToLeftOrRight() && !PlayerIsGrounded())
         {
             animator.SetBool("IsOnWall", true);
+            PlayAudioClip(slideClip);
         }
 
 
