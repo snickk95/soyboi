@@ -94,7 +94,7 @@ public class SoyBoiController : MonoBehaviour
 
     bool playerIsTouchingWallOrGround()
     {
-        if (playerIsTouchingWallOrGround()||PlayerIsGrounded())
+        if (IsWallToLeftOrRight()||PlayerIsGrounded())
         {
             return true;
         }
@@ -173,6 +173,8 @@ public class SoyBoiController : MonoBehaviour
         var acceleration = 0f;
         var xvelocity = 0f;
         var yvelocity = 0f;
+
+
         if (PlayerIsGrounded())
         {
             acceleration = accel;
@@ -182,6 +184,8 @@ public class SoyBoiController : MonoBehaviour
             acceleration = airAccel;
         }
 
+
+
         if (PlayerIsGrounded() && input.x==0)
         {
             xvelocity = 0f;
@@ -190,6 +194,9 @@ public class SoyBoiController : MonoBehaviour
         {
             xvelocity = rb.velocity.x;
         }
+
+
+
 
         if (playerIsTouchingWallOrGround()&& input.y ==1)
         {
@@ -205,6 +212,13 @@ public class SoyBoiController : MonoBehaviour
         rb.AddForce(new Vector2(((input.x * speed) - rb.velocity.x) * acceleration, 0));
         //stops the soy boi from moving in a nutral position
         rb.velocity = new Vector2(xvelocity, yvelocity);
+
+
+
+        if(IsWallToLeftOrRight() && !PlayerIsGrounded() && input.y ==1)
+        {
+            rb.velocity = new Vector2(-getWallDirecton() * speed * 0.75f, rb.velocity.y);
+        }
 
         if (isJumping && jumpDuration < jumpDurationThreshold)
         {
