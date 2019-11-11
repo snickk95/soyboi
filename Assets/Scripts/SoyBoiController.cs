@@ -134,8 +134,10 @@ public class SoyBoiController : MonoBehaviour
         input.x = Input.GetAxis("Horizontal");
         input.y = Input.GetAxis("Jump");
 
+        animator.SetFloat("Speed", Mathf.Abs(input.x));
+
         //flip the sprite on the x axis if the x input is greater than 0 
-        if(input.x > 0f)
+        if (input.x > 0f)
         {
             sr.flipX = false;
         }
@@ -147,11 +149,12 @@ public class SoyBoiController : MonoBehaviour
         if (input.y >= 1f)
         {
             jumpDuration += Time.deltaTime;
-
+            animator.SetBool("IsJumping", true);
         }
         else
         {
             isJumping = false;
+            animator.SetBool("IsJumping", false);
             jumpDuration = 0f;
         }
 
@@ -160,6 +163,7 @@ public class SoyBoiController : MonoBehaviour
             if (input.y>0f)
             {
                 isJumping = true;
+                animator.SetBool("IsOnWall", false);
             }
         }
     }
@@ -218,7 +222,21 @@ public class SoyBoiController : MonoBehaviour
         if(IsWallToLeftOrRight() && !PlayerIsGrounded() && input.y ==1)
         {
             rb.velocity = new Vector2(-getWallDirecton() * speed * 0.75f, rb.velocity.y);
+
+            animator.SetBool("IsOnWall", false);
+            animator.SetBool("IsJumping", true);
         }
+        else if (!IsWallToLeftOrRight())
+        {
+            animator.SetBool("IsOnWall", false);
+            animator.SetBool("IsJumping", true);
+        }
+
+        if (IsWallToLeftOrRight() && !PlayerIsGrounded())
+        {
+            animator.SetBool("IsOnWall", true);
+        }
+
 
         if (isJumping && jumpDuration < jumpDurationThreshold)
         {
