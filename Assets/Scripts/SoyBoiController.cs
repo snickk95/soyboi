@@ -14,7 +14,7 @@ public class SoyBoiController : MonoBehaviour
     public float jumpSpeed = 8f;
     public float jumpDurationThreshold = 0.25f;
     public float airAccel = 3f;
-
+    public float jump = 14f;
 
     //private variables
     private SpriteRenderer sr;
@@ -26,6 +26,10 @@ public class SoyBoiController : MonoBehaviour
     private float height;
     private float jumpDuration;
 
+
+
+
+
     void Awake()
     {
         //set variables to components on soy boi
@@ -35,6 +39,10 @@ public class SoyBoiController : MonoBehaviour
         height = GetComponent<Collider2D>().bounds.extents.x + 0.2f;
         width = GetComponent<Collider2D>().bounds.extents.x + 0.1f;
     }
+
+
+
+
 
 
     void Start()
@@ -60,7 +68,67 @@ public class SoyBoiController : MonoBehaviour
         }
        
     }
+
+
+
+
+    public bool IsWallToLeftOrRight()
+    {
+        bool wallOnLeft = Physics2D.Raycast(new Vector2(transform.position.x - width, transform.position.y), -Vector2.right, rayCastLengthCheck);
+
+        bool wallOnRight = Physics2D.Raycast(new Vector2(transform.position.x + width, transform.position.y), -Vector2.right, rayCastLengthCheck);
+
+        if (wallOnLeft||wallOnRight)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
     
+
+
+
+    bool playerIsTouchingWallOrGround()
+    {
+        if (playerIsTouchingWallOrGround()||PlayerIsGrounded())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+
+
+    public int getWallDirecton()
+    {
+        bool wallLeft = Physics2D.Raycast(new Vector2(transform.position.x - width, transform.position.y), -Vector2.right, rayCastLengthCheck);
+
+        bool wallRight = Physics2D.Raycast(new Vector2(transform.position.x + width, transform.position.y), -Vector2.right, rayCastLengthCheck);
+
+        if(wallLeft)
+        {
+            return -1;
+        }
+        else if(wallRight)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+
+
     void Update()
     {
         input.x = Input.GetAxis("Horizontal");
@@ -97,11 +165,14 @@ public class SoyBoiController : MonoBehaviour
     }
 
 
+
+
+
     void FixedUpdate()
     {
         var acceleration = 0f;
         var xvelocity = 0f;
-
+        var yvelocity = 0f;
         if (PlayerIsGrounded())
         {
             acceleration = accel;
@@ -119,10 +190,21 @@ public class SoyBoiController : MonoBehaviour
         {
             xvelocity = rb.velocity.x;
         }
+
+        if (playerIsTouchingWallOrGround()&& input.y ==1)
+        {
+            yvelocity = jump;
+        }
+        else
+        {
+            yvelocity = rb.velocity.y;
+        }
+
+
         //force is added to rigidbody calculating the horizontal controls multiplied by the speed then multiply by acceleration
         rb.AddForce(new Vector2(((input.x * speed) - rb.velocity.x) * acceleration, 0));
         //stops the soy boi from moving in a nutral position
-        rb.velocity = new Vector2(xvelocity, rb.velocity.y);
+        rb.velocity = new Vector2(xvelocity, yvelocity);
 
         if (isJumping && jumpDuration < jumpDurationThreshold)
         {
