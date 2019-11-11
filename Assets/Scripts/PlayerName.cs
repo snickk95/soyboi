@@ -11,7 +11,7 @@ public class PlayerName : MonoBehaviour
     void Start()
     {
         input = GetComponent<InputField>();
-        input.onValueChange.AddListener(savePlayerName);
+        input.onValueChanged.AddListener(savePlayerName);
 
         var savedName = PlayerPrefs.GetString("PlayerName");
         if (!string.IsNullOrEmpty(savedName)) ;
