@@ -13,7 +13,7 @@ public class SoyBoiController : MonoBehaviour
     public bool isJumping;
     public float jumpSpeed = 8f;
     public float jumpDurationThreshold = 0.25f;
-    
+    public float airAccel = 3f;
 
 
     //private variables
@@ -99,10 +99,19 @@ public class SoyBoiController : MonoBehaviour
 
     void FixedUpdate()
     {
-        var acceleration = accel;
+        var acceleration = 0f;
         var xvelocity = 0f;
 
-        if (input.x==0)
+        if (PlayerIsGrounded())
+        {
+            acceleration = accel;
+        }
+        else
+        {
+            acceleration = airAccel;
+        }
+
+        if (PlayerIsGrounded() && input.x==0)
         {
             xvelocity = 0f;
         }
