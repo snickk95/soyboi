@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public string playerName;
     public static GameManager instance;
+    private InputField input;
 
-     void Awake()
+
+    void Awake()
     {
         if(instance==null)
         {
@@ -24,8 +28,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
+
+   
 
     void Update()
     {
