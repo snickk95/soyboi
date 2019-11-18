@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if(instance==null)
+        if (instance == null)
         {
-                instance = this;
+            instance = this;
         }
-        else if(instance!=this)
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -36,11 +36,11 @@ public class GameManager : MonoBehaviour
 
     }
 
-   
+
 
     void Update()
     {
-        
+
     }
 
     public void RestartLevel(float delay)
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
             }
         }
         //if the try fails the catch will find the error in deserialization and display the error message 
-        catch(IOException ex)
+        catch (IOException ex)
         {
             Debug.Log("could not load previous time for: " + playerName + ".Exception: " + ex.Message);
             return new List<PlayerTimeEntry>();
@@ -95,5 +95,24 @@ public class GameManager : MonoBehaviour
             times.Add(newTime);
             bFormatter.Serialize(file, times);
         }
+    }
+
+    public void DisplayPreviousTimes()
+    {
+        // collects existing times
+        var times = LoadPreviousTimes();
+        var topThree = times.OrderBy(time => time.time).Take(3);
+
+        // find previous times
+        var timesLabel = GameObject.Find("PreviousTimes")
+        .GetComponent<Text>();
+
+        // changes to show each time found
+        timesLabel.text = "BEST TIMES \n";
+        foreach (var time in topThree)
+        {
+            timesLabel.text += time.entryDate.ToShortDateString() + ": " + time.time + "\n";
+        }
+
     }
 }
