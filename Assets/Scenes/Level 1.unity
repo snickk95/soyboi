@@ -3105,7 +3105,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &1128675593
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5342,12 +5342,12 @@ PrefabInstance:
     - target: {fileID: 4946949047894125125, guid: d277e408e20b1e54dab05742e2ecd2ed,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.09
+      value: -12.03
       objectReference: {fileID: 0}
     - target: {fileID: 4946949047894125125, guid: d277e408e20b1e54dab05742e2ecd2ed,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.45
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 4946949047894125125, guid: d277e408e20b1e54dab05742e2ecd2ed,
         type: 3}
@@ -5403,6 +5403,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7692705158081570853, guid: d277e408e20b1e54dab05742e2ecd2ed,
+        type: 3}
+      propertyPath: MinDistance
+      value: 1.3195878
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d277e408e20b1e54dab05742e2ecd2ed, type: 3}

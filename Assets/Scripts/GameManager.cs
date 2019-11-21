@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
 
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         var topThree = times.OrderBy(time => time.time).Take(3);
 
         // find previous times
-        var timesLabel = GameObject.Find("PreviousTimes")
+        var timesLabel = GameObject.Find("Text")
         .GetComponent<Text>();
 
         // changes to show each time found
@@ -114,5 +114,12 @@ public class GameManager : MonoBehaviour
             timesLabel.text += time.entryDate.ToShortDateString() + ": " + time.time + "\n";
         }
 
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadsceneMode)
+    {
+        if (scene.name == "Level 1")
+        {
+            DisplayPreviousTimes();
+        }
     }
 }
