@@ -7,6 +7,6 @@ using System;
 public class LevelDataRepresentation
 {
     public Vector2 playerStartPosition;
-    public CameraSettingsRepersentation cameraSettings;
-    public LevelItemRepersentation[] levelItems;
+    public CameraSettingsRepresentation cameraSettings;
+    public LevelItemRepresentation[] levelItems;
 }
