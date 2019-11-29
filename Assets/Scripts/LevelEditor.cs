@@ -77,8 +77,7 @@ public class LevelEditor : Editor
                 };
 
                 var levelDataToJson = JsonUtility.ToJson(ldr);
-                var savePath = System.IO.Path.Combine(Application.dataPath,
-                level.levelName + ".json");
+                var savePath = System.IO.Path.Combine(Application.dataPath, level.levelName + ".json");
                 System.IO.File.WriteAllText(savePath, levelDataToJson);
                 Debug.Log("Level saved to " + savePath);
             }

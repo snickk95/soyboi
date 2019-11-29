@@ -25,16 +25,18 @@ public class GameManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
+            
         }
 
 
         DontDestroyOnLoad(gameObject);
+        DiscoverLevels();
     }
 
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        DiscoverLevels();
+        
     }
 
     private void SetLevelName(string levelFilePath)
@@ -45,7 +47,6 @@ public class GameManager : MonoBehaviour
 
     private void DiscoverLevels()
     {
-        var levelPanelRectTransform =GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>();
         var levelFiles = Directory.GetFiles(Application.dataPath,"*.json");
 
         var yOffset = 0f;
@@ -58,7 +59,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                yOffset -= 0f;
+                yOffset -= 65f;
             }
             var levelFile = levelFiles[i];
             
@@ -68,7 +69,8 @@ public class GameManager : MonoBehaviour
             var levelButtonObj = (GameObject)Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
             //makes transform a child of buittons prefab
             var levelButtonRectTransform = levelButtonObj.GetComponent<RectTransform>();
-            levelButtonRectTransform.SetParent(levelPanelRectTransform, true);
+
+            levelButtonRectTransform.SetParent(GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>(), true);
             //poisitions the button
             levelButtonRectTransform.anchoredPosition = new Vector2(212.5f, yOffset);
             //sets the buttons text to the levels name
@@ -79,11 +81,10 @@ public class GameManager : MonoBehaviour
             var levelButton = levelButtonObj.GetComponent<Button>();
             levelButton.onClick.AddListener(
             delegate { SetLevelName(levelFile); });
-            levelPanelRectTransform.sizeDelta =
-            new Vector2(levelPanelRectTransform.sizeDelta.x, 60f * i);
+            GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>().sizeDelta =
+            new Vector2(GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>().sizeDelta.x, 60f * i);
         }
-
-        levelPanelRectTransform.offsetMax = new Vector2(levelPanelRectTransform.offsetMax.x, 0f);
+        GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>().offsetMax = new Vector2(GameObject.Find("LevelItemsPanel").GetComponent<RectTransform>().offsetMax.x, 0f);
     }
 
 
@@ -96,7 +97,7 @@ public class GameManager : MonoBehaviour
         // Reads the JSON file content of the selected level — selectedLevel is the path where
         //the level resides after the player clicks the corresponding button.
         var levelFileJsonContent = File.ReadAllText(selectedLevel);
-        var levelData = JsonUtility.FromJson<LevelDataRepresentation>( levelFileJsonContent);
+        var levelData = JsonUtility.FromJson<LevelDataRepresentation>(levelFileJsonContent);
 
         // Makes levelData.levelItems into a fully populated array of
         //LevelItemRepresentation instances.
@@ -104,7 +105,7 @@ public class GameManager : MonoBehaviour
         {
             // looped through in the array, the script locates correct prefab
             //and loads it from the prefabs
-            var pieceResource = Resources.Load("Prefabs/" + li.prefabName);
+            var pieceResource = Resources.Load("Prefab/" + li.prefabName);
             if (pieceResource == null)
             {
                 Debug.LogError("Cannot find resource: " + li.prefabName);
@@ -125,9 +126,9 @@ public class GameManager : MonoBehaviour
             piece.transform.localScale = li.scale;
         }
         //locates SoyBoy and places him at the playerStartPosition location saved in the JSON file
-                var SoyBoy = GameObject.Find("SoyBoi");
-        SoyBoy.transform.position = levelData.playerStartPosition;
-        Camera.main.transform.position = new Vector3(SoyBoy.transform.position.x, SoyBoy.transform.position.y,Camera.main.transform.position.z);
+        var SoyBoi = GameObject.Find("SoyBoi");
+        SoyBoi.transform.position = levelData.playerStartPosition;
+        Camera.main.transform.position = new Vector3(SoyBoi.transform.position.x, SoyBoi.transform.position.y,Camera.main.transform.position.z);
         
         //locates the camera lerp to transform script
         var camSettings = FindObjectOfType<CameraLerpToTransform>();
